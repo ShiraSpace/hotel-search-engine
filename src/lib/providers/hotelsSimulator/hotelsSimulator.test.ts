@@ -61,8 +61,8 @@ describe('hotelsSimulator', () => {
   it('sends correctly-shaped POST bodies', async () => {
     mockFetch(() => EMPTY_RESPONSE);
 
-    for await (const _ of hotelsSimulator.search(QUERY)) {
-      /* drain */
+    for await (const batch of hotelsSimulator.search(QUERY)) {
+      void batch;
     }
 
     const calls = (global.fetch as jest.Mock).mock.calls as [
@@ -108,8 +108,11 @@ describe('hotelsSimulator', () => {
   it('fans out only for group size 10 when groupSize=10 (1 request)', async () => {
     mockFetch(() => EMPTY_RESPONSE);
 
-    for await (const _ of hotelsSimulator.search({ ...QUERY, groupSize: 10 })) {
-      /* drain */
+    for await (const batch of hotelsSimulator.search({
+      ...QUERY,
+      groupSize: 10,
+    })) {
+      void batch;
     }
 
     expect(global.fetch).toHaveBeenCalledTimes(1);

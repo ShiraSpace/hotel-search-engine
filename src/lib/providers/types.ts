@@ -15,12 +15,6 @@ export interface HotelResult {
   groupSize: number;
 }
 
-export interface SearchBatch {
-  providerId: string;
-  groupSize: number;
-  hotels: HotelResult[];
-}
-
 export interface HotelProvider {
   readonly id: string;
   search(query: SearchQuery): AsyncIterable<HotelResult[]>;

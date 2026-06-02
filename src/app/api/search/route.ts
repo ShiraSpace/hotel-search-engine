@@ -38,7 +38,7 @@ export async function POST(req: NextRequest): Promise<Response> {
   }
 
   const stream = new ReadableStream({
-    async start(controller) {
+    async start(controller): Promise<void> {
       const encoder = new TextEncoder();
       try {
         for await (const batch of search(query, providers)) {

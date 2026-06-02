@@ -10,12 +10,36 @@ const mockQuery: SearchQuery = {
 };
 
 const mockHotels1: HotelResult[] = [
-  { id: '1', name: 'Hotel A', stars: 3, location: 'Alps', pricePerPerson: 200, imageUrl: 'a.jpg', groupSize: 2 },
-  { id: '2', name: 'Hotel B', stars: 4, location: 'Alps', pricePerPerson: 400, imageUrl: 'b.jpg', groupSize: 2 },
+  {
+    id: '1',
+    name: 'Hotel A',
+    stars: 3,
+    location: 'Alps',
+    pricePerPerson: 200,
+    imageUrl: 'a.jpg',
+    groupSize: 2,
+  },
+  {
+    id: '2',
+    name: 'Hotel B',
+    stars: 4,
+    location: 'Alps',
+    pricePerPerson: 400,
+    imageUrl: 'b.jpg',
+    groupSize: 2,
+  },
 ];
 
 const mockHotels2: HotelResult[] = [
-  { id: '3', name: 'Hotel C', stars: 5, location: 'Alps', pricePerPerson: 300, imageUrl: 'c.jpg', groupSize: 3 },
+  {
+    id: '3',
+    name: 'Hotel C',
+    stars: 5,
+    location: 'Alps',
+    pricePerPerson: 300,
+    imageUrl: 'c.jpg',
+    groupSize: 3,
+  },
 ];
 
 function createMockBody(chunks: string[]): {
@@ -116,45 +140,109 @@ describe('useHotelSearch', () => {
 
   it('deduplicates same hotel + same groupSize, keeping the cheaper price', async () => {
     const batch1: HotelResult[] = [
-      { id: '1', name: 'Hotel A', stars: 3, location: 'Alps', pricePerPerson: 400, imageUrl: 'a.jpg', groupSize: 2 },
+      {
+        id: '1',
+        name: 'Hotel A',
+        stars: 3,
+        location: 'Alps',
+        pricePerPerson: 400,
+        imageUrl: 'a.jpg',
+        groupSize: 2,
+      },
     ];
     const batch2: HotelResult[] = [
-      { id: '1', name: 'Hotel A', stars: 3, location: 'Alps', pricePerPerson: 300, imageUrl: 'a.jpg', groupSize: 2 },
-      { id: '2', name: 'Hotel B', stars: 4, location: 'Alps', pricePerPerson: 200, imageUrl: 'b.jpg', groupSize: 2 },
+      {
+        id: '1',
+        name: 'Hotel A',
+        stars: 3,
+        location: 'Alps',
+        pricePerPerson: 300,
+        imageUrl: 'a.jpg',
+        groupSize: 2,
+      },
+      {
+        id: '2',
+        name: 'Hotel B',
+        stars: 4,
+        location: 'Alps',
+        pricePerPerson: 200,
+        imageUrl: 'b.jpg',
+        groupSize: 2,
+      },
     ];
 
     global.fetch = jest.fn().mockResolvedValue({
       ok: true,
-      body: createMockBody([JSON.stringify(batch1) + '\n', JSON.stringify(batch2) + '\n']),
+      body: createMockBody([
+        JSON.stringify(batch1) + '\n',
+        JSON.stringify(batch2) + '\n',
+      ]),
     });
 
     const { result } = renderHook(() => useHotelSearch());
-    await act(async () => { result.current.search(mockQuery); });
+    await act(async () => {
+      result.current.search(mockQuery);
+    });
 
     expect(result.current.results).toHaveLength(2);
-    expect(result.current.results[0]).toMatchObject({ id: '2', pricePerPerson: 200 });
-    expect(result.current.results[1]).toMatchObject({ id: '1', pricePerPerson: 300 });
+    expect(result.current.results[0]).toMatchObject({
+      id: '2',
+      pricePerPerson: 200,
+    });
+    expect(result.current.results[1]).toMatchObject({
+      id: '1',
+      pricePerPerson: 300,
+    });
   });
 
   it('keeps same hotel as separate entries when groupSize differs', async () => {
     const batch1: HotelResult[] = [
-      { id: '1', name: 'Hotel A', stars: 3, location: 'Alps', pricePerPerson: 400, imageUrl: 'a.jpg', groupSize: 2 },
+      {
+        id: '1',
+        name: 'Hotel A',
+        stars: 3,
+        location: 'Alps',
+        pricePerPerson: 400,
+        imageUrl: 'a.jpg',
+        groupSize: 2,
+      },
     ];
     const batch2: HotelResult[] = [
-      { id: '1', name: 'Hotel A', stars: 3, location: 'Alps', pricePerPerson: 350, imageUrl: 'a.jpg', groupSize: 4 },
+      {
+        id: '1',
+        name: 'Hotel A',
+        stars: 3,
+        location: 'Alps',
+        pricePerPerson: 350,
+        imageUrl: 'a.jpg',
+        groupSize: 4,
+      },
     ];
 
     global.fetch = jest.fn().mockResolvedValue({
       ok: true,
-      body: createMockBody([JSON.stringify(batch1) + '\n', JSON.stringify(batch2) + '\n']),
+      body: createMockBody([
+        JSON.stringify(batch1) + '\n',
+        JSON.stringify(batch2) + '\n',
+      ]),
     });
 
     const { result } = renderHook(() => useHotelSearch());
-    await act(async () => { result.current.search(mockQuery); });
+    await act(async () => {
+      result.current.search(mockQuery);
+    });
 
     expect(result.current.results).toHaveLength(2);
-    expect(result.current.results[0]).toMatchObject({ id: '1', groupSize: 4, pricePerPerson: 350 });
-    expect(result.current.results[1]).toMatchObject({ id: '1', groupSize: 2, pricePerPerson: 400 });
+    expect(result.current.results[0]).toMatchObject({
+      id: '1',
+      groupSize: 4,
+      pricePerPerson: 350,
+    });
+    expect(result.current.results[1]).toMatchObject({
+      id: '1',
+      groupSize: 2,
+      pricePerPerson: 400,
+    });
   });
 
   it('clears previous results and error when search is called again', async () => {

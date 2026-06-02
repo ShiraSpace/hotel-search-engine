@@ -2,6 +2,8 @@ export const SIMULATOR_ENDPOINT =
   'https://gya7b1xubh.execute-api.eu-west-2.amazonaws.com/default/HotelsSimulator';
 
 export const MAX_GROUP_SIZE = 10;
+export const PROVIDER_ID = 'hotels-simulator';
+export const MAIN_IMAGE_SENTINEL = 'True';
 
 export function groupSizeRange(min: number): number[] {
   const result: number[] = [];

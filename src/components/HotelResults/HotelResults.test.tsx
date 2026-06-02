@@ -10,6 +10,7 @@ const makeHotel = (overrides: Partial<HotelResult>): HotelResult => ({
   location: 'Alps',
   pricePerPerson: 500,
   imageUrl: 'https://example.com/img.jpg',
+  groupSize: 2,
   ...overrides,
 });
 

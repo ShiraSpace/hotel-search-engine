@@ -1,4 +1,5 @@
 import { JSX } from 'react';
+import Image from 'next/image';
 import type { HotelResult } from '@/lib/providers/types';
 import { TEST_IDS, LABELS } from './constants';
 
@@ -11,8 +12,27 @@ function StarRating({ count }: { count: number }): JSX.Element {
   return (
     <span style={{ color: 'var(--color-star)' }} aria-label={`${count} stars`}>
       {'★'.repeat(count)}
-      {'☆'.repeat(Math.max(0, 5 - count))}
     </span>
+  );
+}
+
+function PinIcon(): JSX.Element {
+  return (
+    <svg
+      width="13"
+      height="13"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+      style={{ flexShrink: 0 }}
+    >
+      <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z" />
+      <circle cx="12" cy="10" r="3" />
+    </svg>
   );
 }
 
@@ -34,34 +54,44 @@ function HotelCard({ hotel }: { hotel: HotelResult }): JSX.Element {
         (e.currentTarget as HTMLElement).style.boxShadow = 'var(--shadow-card)';
       }}
     >
-      <img
+      <Image
         src={hotel.imageUrl}
         alt={hotel.name}
+        width={260}
+        height={180}
         className="flex-shrink-0 object-cover"
-        style={{ width: '218px', height: '160px' }}
+        style={{ height: '100%', minHeight: '180px' }}
+        unoptimized
       />
       <div className="flex flex-1 flex-col justify-between p-5">
-        <div className="flex flex-col gap-1">
-          <h3 className="text-base leading-tight font-bold text-[var(--color-text)]">
+        <div className="flex flex-col gap-1.5">
+          <h3 className="text-base leading-tight font-semibold text-[var(--color-text)]">
             {hotel.name}
           </h3>
           <StarRating count={hotel.stars} />
-          <p className="flex items-center gap-1 text-sm text-[var(--color-text-2)]">
-            <span aria-hidden="true">📍</span>
+          <p
+            className="flex items-center gap-1.5 text-sm text-[var(--color-text-2)]"
+            style={{ marginTop: '2px' }}
+          >
+            <PinIcon />
             {hotel.location}
           </p>
-          <p className="flex items-center gap-1 text-sm text-[var(--color-text-2)]">
-            <span aria-hidden="true">🛏️</span>
-            {LABELS.sleeps(hotel.groupSize)}
+          <p className="text-sm text-[var(--color-text-2)]">
+            🛏️ {LABELS.sleeps(hotel.groupSize)}
           </p>
         </div>
-        <p className="text-right font-bold text-[var(--color-primary)]">
-          {formatPrice(hotel.pricePerPerson)}
-          <span className="text-sm font-normal text-[var(--color-text-2)]">
-            {' '}
-            {LABELS.perPerson}
-          </span>
-        </p>
+        <div>
+          <hr
+            style={{ borderColor: 'var(--color-border)', marginBottom: '12px' }}
+          />
+          <p className="text-right font-bold text-[var(--color-text)]">
+            {formatPrice(hotel.pricePerPerson)}
+            <span className="text-sm font-normal text-[var(--color-text-2)]">
+              {' '}
+              {LABELS.perPerson}
+            </span>
+          </p>
+        </div>
       </div>
     </article>
   );

@@ -20,13 +20,14 @@ function makeHotel(id: string, price: number): HotelResult {
     location: 'Alps',
     pricePerPerson: price,
     imageUrl: '',
+    groupSize: 2,
   };
 }
 
 function makeProvider(id: string, batches: HotelResult[][]): HotelProvider {
   return {
     id,
-    async *search() {
+    async *search(): AsyncGenerator<HotelResult[]> {
       for (const batch of batches) {
         yield batch;
       }

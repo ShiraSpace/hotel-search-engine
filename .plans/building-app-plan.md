@@ -174,7 +174,43 @@ Build the features in this order. Finish one before starting the next. Each step
 
 ---
 
-## Step 10 — README + cleanup
+## Step 10 — Design Alignment (WeSki Mockup Polish)
+
+**Goal**: make the live app visually match the provided Figma mockup — logo, search bar layout, results header, and hotel card styling.
+
+### Sub-steps (implement one at a time)
+
+#### 10a — Logo ✅
+- [x] Replace "WeSki." text with a mountain SVG icon + "WE·SKI" text, both in `--color-primary` blue.
+- [x] Use the `.logo` CSS class; keep `--font-logo` (Nunito 800) and `letter-spacing`.
+
+#### 10b — Search bar: 3 separate bordered inputs ✅
+- [x] Remove the single connected `.search-bar` container.
+- [x] Replace with `.search-form` (flex, gap) holding three individual `.search-field` bordered inputs (destination, guests, date range).
+- [x] Combine `fromDate` + `toDate` into one visual `.search-field` with a "–" separator between the two native date inputs.
+- [x] `.search-btn` becomes a standalone rounded button (not attached to the bar).
+- [x] All existing test IDs (`data-testid`) must be preserved — tests should stay green.
+
+#### 10c — Results header ✅
+- [x] After a search, show `"Select your ski trip"` as an `<h1>` above the card list.
+- [x] Below the heading, show a subtitle: `"{N} ski trip options • {Resort} • {fromDate} – {toDate} • {groupSize} people"`.
+- [x] Track `lastQuery` in `page.tsx` state; use `getResortById` for the resort name; format dates as human-readable (e.g. "Dec 1").
+- [x] The pre-search hero ("Find your perfect ski hotel") remains unchanged.
+
+#### 10d — Hotel card polish ✅
+- [x] Stars: show only filled stars (`★`.repeat(count)); remove the empty-star characters.
+- [x] Location: replace the `📍` emoji with an inline SVG pin icon in `--color-text-2`.
+- [x] Remove the "Sleeps N" row (not shown in mockup); `LABELS.sleeps` kept in constants but unused.
+- [x] Add a horizontal `<hr>` divider above the price row.
+- [x] Price: change text color from `--color-primary` blue to `--color-text` dark; `/per person` stays `--color-text-2`.
+
+### How we check it
+- [x] `npm test` still green — 44/44 tests passing.
+- [ ] `npm run dev` — visual matches the mockup screenshot: logo, separated search fields, results heading with subtitle, polished cards.
+
+---
+
+## Step 11 — README + cleanup
 
 **Goal**: a repo a stranger can clone, run, and understand in under 5 minutes.
 

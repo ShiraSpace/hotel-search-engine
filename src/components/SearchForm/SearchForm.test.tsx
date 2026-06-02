@@ -29,9 +29,12 @@ describe('SearchForm', () => {
   it('renders group size options from 1 to 10', () => {
     const select = screen.getByTestId(TEST_IDS.GROUP_SIZE_SELECT);
     expect(select).toBeInTheDocument();
-    for (let i = 1; i <= 10; i++) {
+    expect(
+      screen.getByRole('option', { name: '1 person' })
+    ).toBeInTheDocument();
+    for (let i = 2; i <= 10; i++) {
       expect(
-        screen.getByRole('option', { name: String(i) })
+        screen.getByRole('option', { name: `${i} people` })
       ).toBeInTheDocument();
     }
   });

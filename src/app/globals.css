@@ -57,46 +57,80 @@ body {
 .nav {
   background: var(--color-surface);
   border-bottom: 1px solid var(--color-border);
-  height: 60px;
+  height: 64px;
   padding: 0 40px;
   display: flex;
   align-items: center;
-  gap: 28px;
+  gap: 32px;
   position: sticky;
-  top: 4px;
+  top: 0;
   z-index: 50;
 }
 
-/* ── Search bar ─────────────────────────────────────────────── */
-.search-bar {
-  flex: 1;
-  max-width: 640px;
-  height: 42px;
+/* ── Logo ───────────────────────────────────────────────────── */
+.logo {
   display: flex;
-  align-items: stretch;
-  border: 1.5px solid var(--color-border);
-  border-radius: var(--radius-input);
-  background: var(--color-surface);
-  overflow: hidden;
-  transition: border-color 0.15s, box-shadow 0.15s;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-logo);
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--color-primary);
+  text-decoration: none;
+  letter-spacing: 0.5px;
+  flex-shrink: 0;
 }
 
-.search-bar:focus-within {
-  border-color: var(--color-primary);
-  box-shadow: var(--shadow-search);
+.logo-dot {
+  color: var(--color-primary);
 }
 
-.search-segment {
+/* ── Search form ────────────────────────────────────────────── */
+.search-form {
   flex: 1;
+  max-width: 760px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.search-field {
+  flex: 1;
+  height: 44px;
   display: flex;
   align-items: center;
   gap: 8px;
   padding: 0 14px;
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-input);
+  background: var(--color-surface);
+  transition: border-color 0.15s, box-shadow 0.15s;
   min-width: 0;
 }
 
-.search-segment:hover {
-  background: #f9fafb;
+.search-field:focus-within {
+  border-color: var(--color-primary);
+  box-shadow: var(--shadow-search);
+}
+
+.search-field-date {
+  flex: 1.4;
+  gap: 4px;
+}
+
+.date-sep {
+  font-size: 13px;
+  color: var(--color-text-3);
+  flex-shrink: 0;
+  user-select: none;
+}
+
+input[type='date'].seg-text {
+  min-width: 86px;
+}
+
+input[type='date']::-webkit-calendar-picker-indicator {
+  display: none;
 }
 
 .seg-icon {
@@ -113,29 +147,21 @@ body {
   text-overflow: ellipsis;
 }
 
-.search-divider {
-  width: 1px;
-  background: var(--color-divider);
-  align-self: stretch;
-  margin: 8px 0;
-  flex-shrink: 0;
-}
-
 .search-btn {
-  height: 100%;
-  padding: 0 18px;
+  height: 44px;
+  padding: 0 20px;
   background: var(--color-primary);
   color: white;
   border: none;
   font-family: var(--font-sans);
-  font-size: 13.5px;
+  font-size: 14px;
   font-weight: 600;
   cursor: pointer;
   display: flex;
   align-items: center;
   gap: 7px;
   transition: background 0.15s;
-  border-radius: 0 8px 8px 0;
+  border-radius: var(--radius-input);
   flex-shrink: 0;
 }
 
@@ -148,9 +174,53 @@ body {
   cursor: not-allowed;
 }
 
+/* ── Results header ─────────────────────────────────────────── */
+.results-header {
+  margin-bottom: 28px;
+}
+
+.results-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--color-text);
+  margin-bottom: 6px;
+  letter-spacing: -0.3px;
+}
+
+.results-subtitle {
+  font-size: 14px;
+  color: var(--color-text-2);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.subtitle-dot {
+  color: var(--color-text-3);
+}
+
+/* ── Hero (pre-search) ──────────────────────────────────────── */
+.hero {
+  margin-bottom: 28px;
+}
+
+.hero-title {
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--color-text);
+  margin-bottom: 5px;
+  letter-spacing: -0.3px;
+}
+
+.hero-sub {
+  font-size: 13.5px;
+  color: var(--color-text-2);
+}
+
 /* ── Main content ───────────────────────────────────────────── */
 .main {
-  max-width: 900px;
+  max-width: 980px;
   margin: 0 auto;
-  padding: 36px 40px 80px;
+  padding: 40px 40px 80px;
 }

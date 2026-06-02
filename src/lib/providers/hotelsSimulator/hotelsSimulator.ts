@@ -1,5 +1,11 @@
 import type { HotelProvider, HotelResult, SearchQuery } from '../types';
-import { SIMULATOR_ENDPOINT, formatDate, groupSizeRange } from './config';
+import {
+  SIMULATOR_ENDPOINT,
+  PROVIDER_ID,
+  MAIN_IMAGE_SENTINEL,
+  formatDate,
+  groupSizeRange,
+} from './config';
 
 interface SimulatorImage {
   URL: string;
@@ -36,7 +42,7 @@ interface SimulatorResponse {
 
 function mapHotel(raw: SimulatorHotel, groupSize: number): HotelResult {
   const mainImage = raw.HotelDescriptiveContent.Images.find(
-    (img) => img.MainImage === 'True'
+    (img) => img.MainImage === MAIN_IMAGE_SENTINEL
   );
   const imageUrl =
     mainImage?.URL ?? raw.HotelDescriptiveContent.Images[0]?.URL ?? '';
@@ -69,6 +75,7 @@ async function fetchGroupSize(
       },
     }),
   });
+  if (!res.ok) throw new Error(`Simulator API error: ${res.status}`);
   const data: SimulatorResponse = await res.json();
   return (data.body.accommodations ?? []).map((h) => mapHotel(h, groupSize));
 }
@@ -95,6 +102,6 @@ async function* search(query: SearchQuery): AsyncGenerator<HotelResult[]> {
 }
 
 export const hotelsSimulator: HotelProvider = {
-  id: 'hotels-simulator',
+  id: PROVIDER_ID,
   search,
 };
