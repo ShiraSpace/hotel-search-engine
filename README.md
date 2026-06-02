@@ -1,6 +1,7 @@
-e# WeSki Hotel Search
+# WeSki Hotel Search
 
 A streaming hotel search app built with Next.js 16 (App Router), React, and TypeScript.
+<img width="1655" height="505" alt="image" src="https://github.com/user-attachments/assets/0a846d3c-4c00-4835-8a8f-dccf4878d98b" />
 
 ---
 
