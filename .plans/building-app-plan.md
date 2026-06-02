@@ -67,33 +67,37 @@ Build the features in this order. Finish one before starting the next. Each step
 
 ---
 
-## Step 3 — HotelsSimulator provider
+## Step 3 — HotelsSimulator provider ✅
 
 **Goal**: one working provider implementing the interface, with fan-out + streaming yields.
 
 **Files**
-- [ ] `src/lib/providers/hotelsSimulator/config.ts` — endpoint URL, group-size range fn, date format.
-- [ ] `src/lib/providers/hotelsSimulator/index.ts` — implements `HotelProvider`. Internally: fire one `fetch` per group size in `N..10` in parallel, yield each response as it resolves.
-- [ ] `src/lib/providers/hotelsSimulator/hotelsSimulator.test.ts` — mocked `fetch` with controllable timing; asserts fan-out count, yield order, request shape.
+- [x] `src/lib/providers/hotelsSimulator/config.ts` — endpoint URL, group-size range fn, date format.
+- [x] `src/lib/providers/hotelsSimulator/hotelsSimulator.ts` — implements `HotelProvider`. Fans out group sizes N..10 in parallel, yields each response as it resolves.
+- [x] `src/lib/providers/hotelsSimulator/index.ts` — named re-export.
+- [x] `src/lib/providers/hotelsSimulator/hotelsSimulator.test.ts` — mocked fetch; asserts fan-out count, request shape, field mapping.
+- [x] `src/lib/providers/hotelsSimulator/hotelsSimulator.integration.test.ts` — real API calls with varied bodies (group_size 4/8/10, different dates, ski_site 2).
+
+**Note**: Real API shape differed from initial assumption. Response is `{ statusCode, body: { accommodations[] } }` with PascalCase fields. `SimulatorResponse` and `mapHotel` updated accordingly. `location` is derived from lat/lng (no resort name in API response).
 
 **Verify**:
-- [ ] `npm test` green.
+- [x] `npm test` green (24 tests, all passing).
 
 ---
 
-## Step 4 — Registry + aggregator
+## Step 4 — Registry + aggregator ✅
 
 **Goal**: a single function that runs every registered provider and yields a merged stream.
 
 **Files**
-- [ ] `src/lib/providers/registry.ts` — `export const providers: HotelProvider[] = [hotelsSimulator]`.
-- [ ] `src/lib/search/mergeAsyncIterables.ts` — generic utility that merges N async iterables, yielding whichever produces next.
-- [ ] `src/lib/search/mergeAsyncIterables.test.ts`.
-- [ ] `src/lib/search/aggregate.ts` — `search(query): AsyncIterable<SearchBatch>` — iterates the registry, calls each `.search()`, merges results.
-- [ ] `src/lib/search/aggregate.test.ts` — uses fake providers to assert merge behavior.
+- [x] `src/lib/providers/registry.ts` — `export const providers: HotelProvider[] = [hotelsSimulator]`.
+- [x] `src/lib/search/mergeAsyncIterables.ts` — generic utility that merges N async iterables, yielding whichever produces next.
+- [x] `src/lib/search/mergeAsyncIterables.test.ts`.
+- [x] `src/lib/search/aggregate.ts` — `search(query, providers): AsyncIterable<HotelResult[]>` — maps providers to their search iterables and merges.
+- [x] `src/lib/search/aggregate.test.ts` — uses fake providers to assert merge behavior.
 
 **Verify**:
-- [ ] `npm test` green.
+- [x] `npm test` green.
 
 ---
 
