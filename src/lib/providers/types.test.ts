@@ -1,4 +1,9 @@
-import type { HotelProvider, HotelResult, SearchBatch, SearchQuery } from './types';
+import type {
+  HotelProvider,
+  HotelResult,
+  SearchBatch,
+  SearchQuery,
+} from './types';
 
 describe('HotelProvider contract', () => {
   it('accepts a valid mock provider', () => {

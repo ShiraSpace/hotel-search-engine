@@ -36,7 +36,9 @@ describe('HotelResults', () => {
     });
 
     it('does not show loading indicator', () => {
-      expect(screen.queryByTestId(TEST_IDS.loadingIndicator)).not.toBeInTheDocument();
+      expect(
+        screen.queryByTestId(TEST_IDS.loadingIndicator)
+      ).not.toBeInTheDocument();
     });
 
     it('does not show empty state', () => {
@@ -83,7 +85,12 @@ describe('HotelResults', () => {
 
   describe('price formatting', () => {
     beforeEach(() => {
-      render(<HotelResults results={[makeHotel({ pricePerPerson: 1234 })]} isLoading={false} />);
+      render(
+        <HotelResults
+          results={[makeHotel({ pricePerPerson: 1234 })]}
+          isLoading={false}
+        />
+      );
     });
 
     it('formats price with £ symbol and comma separator', () => {

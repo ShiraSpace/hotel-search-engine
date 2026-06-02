@@ -9,4 +9,5 @@ export const LABELS = {
   loadingMore: 'Loading more results…',
   noResults: 'No hotels found. Try adjusting your search.',
   perPerson: '/per person',
+  sleeps: (n: number): string => `Sleeps ${n}`,
 } as const;

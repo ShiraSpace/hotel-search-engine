@@ -34,9 +34,12 @@ interface SimulatorResponse {
   };
 }
 
-function mapHotel(raw: SimulatorHotel): HotelResult {
-  const mainImage = raw.HotelDescriptiveContent.Images.find((img) => img.MainImage === 'True');
-  const imageUrl = mainImage?.URL ?? raw.HotelDescriptiveContent.Images[0]?.URL ?? '';
+function mapHotel(raw: SimulatorHotel, groupSize: number): HotelResult {
+  const mainImage = raw.HotelDescriptiveContent.Images.find(
+    (img) => img.MainImage === 'True'
+  );
+  const imageUrl =
+    mainImage?.URL ?? raw.HotelDescriptiveContent.Images[0]?.URL ?? '';
   const { Latitude, Longitude } = raw.HotelInfo.Position;
 
   return {
@@ -46,10 +49,14 @@ function mapHotel(raw: SimulatorHotel): HotelResult {
     location: `${Latitude}, ${Longitude}`,
     pricePerPerson: Number(raw.PricesInfo.AmountAfterTax),
     imageUrl,
+    groupSize,
   };
 }
 
-async function fetchGroupSize(query: SearchQuery, groupSize: number): Promise<HotelResult[]> {
+async function fetchGroupSize(
+  query: SearchQuery,
+  groupSize: number
+): Promise<HotelResult[]> {
   const res = await fetch(SIMULATOR_ENDPOINT, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -63,7 +70,7 @@ async function fetchGroupSize(query: SearchQuery, groupSize: number): Promise<Ho
     }),
   });
   const data: SimulatorResponse = await res.json();
-  return (data.body.accommodations ?? []).map(mapHotel);
+  return (data.body.accommodations ?? []).map((h) => mapHotel(h, groupSize));
 }
 
 async function* search(query: SearchQuery): AsyncGenerator<HotelResult[]> {
@@ -73,7 +80,10 @@ async function* search(query: SearchQuery): AsyncGenerator<HotelResult[]> {
   const pending = new Set<Promise<Tagged>>();
 
   for (const size of sizes) {
-    const p: Promise<Tagged> = fetchGroupSize(query, size).then((value) => ({ value, self: p }));
+    const p: Promise<Tagged> = fetchGroupSize(query, size).then((value) => ({
+      value,
+      self: p,
+    }));
     pending.add(p);
   }
 

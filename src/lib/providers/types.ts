@@ -12,6 +12,7 @@ export interface HotelResult {
   location: string;
   pricePerPerson: number;
   imageUrl: string;
+  groupSize: number;
 }
 
 export interface SearchBatch {

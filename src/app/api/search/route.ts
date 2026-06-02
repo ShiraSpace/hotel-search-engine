@@ -10,9 +10,9 @@ interface SearchRequestBody {
   groupSize: number;
 }
 
-function parseBody(body: unknown): SearchQuery | null {
-  if (!body || typeof body !== 'object') return null;
-  const b = body as Partial<SearchRequestBody>;
+function parseBody(rawBody: unknown): SearchQuery | null {
+  if (!rawBody || typeof rawBody !== 'object') return null;
+  const b = rawBody as Partial<SearchRequestBody>;
   if (
     typeof b.skiSiteId !== 'number' ||
     typeof b.fromDate !== 'string' ||
@@ -21,12 +21,17 @@ function parseBody(body: unknown): SearchQuery | null {
   ) {
     return null;
   }
-  return { skiSiteId: b.skiSiteId, fromDate: b.fromDate, toDate: b.toDate, groupSize: b.groupSize };
+  return {
+    skiSiteId: b.skiSiteId,
+    fromDate: b.fromDate,
+    toDate: b.toDate,
+    groupSize: b.groupSize,
+  };
 }
 
 export async function POST(req: NextRequest): Promise<Response> {
-  const body = await req.json().catch(() => null);
-  const query = parseBody(body);
+  const rawBody = await req.json().catch(() => null);
+  const query = parseBody(rawBody);
 
   if (!query) {
     return Response.json({ error: 'Invalid request body' }, { status: 400 });

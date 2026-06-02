@@ -19,7 +19,9 @@ type IterSlot<T> = {
 };
 
 // Carries either a value + its source slot, or a done signal + its source slot.
-type IterResult<T> = { slot: IterSlot<T>; done: true } | { slot: IterSlot<T>; done: false; value: T };
+type IterResult<T> =
+  | { slot: IterSlot<T>; done: true }
+  | { slot: IterSlot<T>; done: false; value: T };
 
 /**
  * Pulls the next value from the slot's iterator and stores the resulting promise
@@ -30,16 +32,23 @@ type IterResult<T> = { slot: IterSlot<T>; done: true } | { slot: IterSlot<T>; do
  */
 function advance<T>(slot: IterSlot<T>): void {
   slot.next = slot.iter.next().then((result): IterResult<T> => {
-    return result.done ? { slot, done: true } : { slot, done: false, value: result.value };
+    return result.done
+      ? { slot, done: true }
+      : { slot, done: false, value: result.value };
   });
 }
 
-export async function* mergeAsyncIterables<T>(iterables: AsyncIterable<T>[]): AsyncGenerator<T> {
+export async function* mergeAsyncIterables<T>(
+  iterables: AsyncIterable<T>[]
+): AsyncGenerator<T> {
   if (iterables.length === 0) return;
 
   // One slot per iterable — each slot holds its iterator and its current in-flight promise.
   const slots: IterSlot<T>[] = iterables.map((iterable) => {
-    const slot: IterSlot<T> = { iter: iterable[Symbol.asyncIterator](), next: null! };
+    const slot: IterSlot<T> = {
+      iter: iterable[Symbol.asyncIterator](),
+      next: null!,
+    };
     advance(slot);
     return slot;
   });
@@ -56,7 +65,7 @@ export async function* mergeAsyncIterables<T>(iterables: AsyncIterable<T>[]): As
 
     if (!result.done) {
       yield result.value;
-      advance(result.slot);        // queue the next pull for the winning iterator
+      advance(result.slot); // queue the next pull for the winning iterator
       pending.add(result.slot.next); // re-enter it into the race
     }
     // done === true: iterator exhausted — don't re-add, it falls out of the race

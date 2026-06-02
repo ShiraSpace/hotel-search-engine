@@ -25,7 +25,10 @@ const MOCK_RAW_HOTEL = {
   },
 };
 
-const EMPTY_RESPONSE = { statusCode: 200, body: { success: 'true', accommodations: [] } };
+const EMPTY_RESPONSE = {
+  statusCode: 200,
+  body: { success: 'true', accommodations: [] },
+};
 
 function mockFetch(responseFactory: () => object): void {
   (global.fetch as jest.Mock).mockResolvedValue({
@@ -62,10 +65,15 @@ describe('hotelsSimulator', () => {
       /* drain */
     }
 
-    const calls = (global.fetch as jest.Mock).mock.calls as [string, RequestInit][];
+    const calls = (global.fetch as jest.Mock).mock.calls as [
+      string,
+      RequestInit,
+    ][];
     const bodies = calls.map((c) => JSON.parse(c[1].body as string));
 
-    const groupSizes = bodies.map((b) => b.query.group_size).sort((a: number, b: number) => a - b);
+    const groupSizes = bodies
+      .map((b) => b.query.group_size)
+      .sort((a: number, b: number) => a - b);
     expect(groupSizes).toEqual([4, 5, 6, 7, 8, 9, 10]);
 
     const first = bodies[0].query;
@@ -86,13 +94,14 @@ describe('hotelsSimulator', () => {
     }
 
     const flat = batches.flat();
-    expect(flat[0]).toEqual({
+    expect(flat[0]).toMatchObject({
       id: 'hotel-1',
       name: 'Alpine Resort',
       stars: 4,
       location: '45.29, 6.57',
       pricePerPerson: 1200,
       imageUrl: 'https://example.com/img.jpg',
+      groupSize: expect.any(Number),
     });
   });
 

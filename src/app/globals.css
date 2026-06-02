@@ -1,8 +1,6 @@
 @import 'tailwindcss';
 @source '../**/*.{ts,tsx}';
 
-/* ── Google Fonts ──────────────────────────────────────────── */
-@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap');
 
 /* ── Design Tokens ─────────────────────────────────────────── */
 @theme {
@@ -53,4 +51,106 @@ html {
 
 body {
   min-height: 100vh;
+}
+
+/* ── Nav ────────────────────────────────────────────────────── */
+.nav {
+  background: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+  height: 60px;
+  padding: 0 40px;
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  position: sticky;
+  top: 4px;
+  z-index: 50;
+}
+
+/* ── Search bar ─────────────────────────────────────────────── */
+.search-bar {
+  flex: 1;
+  max-width: 640px;
+  height: 42px;
+  display: flex;
+  align-items: stretch;
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-input);
+  background: var(--color-surface);
+  overflow: hidden;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.search-bar:focus-within {
+  border-color: var(--color-primary);
+  box-shadow: var(--shadow-search);
+}
+
+.search-segment {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 14px;
+  min-width: 0;
+}
+
+.search-segment:hover {
+  background: #f9fafb;
+}
+
+.seg-icon {
+  color: var(--color-text-3);
+  flex-shrink: 0;
+}
+
+.seg-text {
+  font-size: 13.5px;
+  font-weight: 500;
+  color: var(--color-text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.search-divider {
+  width: 1px;
+  background: var(--color-divider);
+  align-self: stretch;
+  margin: 8px 0;
+  flex-shrink: 0;
+}
+
+.search-btn {
+  height: 100%;
+  padding: 0 18px;
+  background: var(--color-primary);
+  color: white;
+  border: none;
+  font-family: var(--font-sans);
+  font-size: 13.5px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  transition: background 0.15s;
+  border-radius: 0 8px 8px 0;
+  flex-shrink: 0;
+}
+
+.search-btn:hover:not(:disabled) {
+  background: var(--color-primary-dark);
+}
+
+.search-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ── Main content ───────────────────────────────────────────── */
+.main {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 36px 40px 80px;
 }

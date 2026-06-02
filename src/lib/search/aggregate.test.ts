@@ -1,5 +1,9 @@
 import { search } from './aggregate';
-import type { HotelProvider, HotelResult, SearchQuery } from '../providers/types';
+import type {
+  HotelProvider,
+  HotelResult,
+  SearchQuery,
+} from '../providers/types';
 
 const QUERY: SearchQuery = {
   skiSiteId: 1,
@@ -9,7 +13,14 @@ const QUERY: SearchQuery = {
 };
 
 function makeHotel(id: string, price: number): HotelResult {
-  return { id, name: id, stars: 3, location: 'Alps', pricePerPerson: price, imageUrl: '' };
+  return {
+    id,
+    name: id,
+    stars: 3,
+    location: 'Alps',
+    pricePerPerson: price,
+    imageUrl: '',
+  };
 }
 
 function makeProvider(id: string, batches: HotelResult[][]): HotelProvider {
@@ -23,7 +34,9 @@ function makeProvider(id: string, batches: HotelResult[][]): HotelProvider {
   };
 }
 
-async function collect(iter: AsyncIterable<HotelResult[]>): Promise<HotelResult[][]> {
+async function collect(
+  iter: AsyncIterable<HotelResult[]>
+): Promise<HotelResult[][]> {
   const results: HotelResult[][] = [];
   for await (const batch of iter) {
     results.push(batch);

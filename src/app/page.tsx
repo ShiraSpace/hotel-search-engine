@@ -56,10 +56,14 @@ export default function Home(): JSX.Element {
         )}
 
         {error && (
-          <p style={{ color: 'red', marginBottom: '16px', fontSize: '14px' }}>{error}</p>
+          <p style={{ color: 'red', marginBottom: '16px', fontSize: '14px' }}>
+            {error}
+          </p>
         )}
 
-        {hasSearched && <HotelResults results={results} isLoading={isLoading} />}
+        {hasSearched && (
+          <HotelResults results={results} isLoading={isLoading} />
+        )}
       </main>
     </>
   );
