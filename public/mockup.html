@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WeSki — Ski Hotel Search</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg: #eef1fb;
+        --surface: #ffffff;
+        --primary: #2563eb;
+        --primary-dark: #1d4ed8;
+        --star: #f59e0b;
+        --text: #111827;
+        --text-2: #6b7280;
+        --text-3: #9ca3af;
+        --border: #e5e7eb;
+        --divider: #d1d5db;
+        --font-logo: 'Nunito', system-ui, sans-serif;
+        --font-body: 'Inter', system-ui, sans-serif;
+        --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
+        --shadow-card-hover: 0 4px 24px rgba(0, 0, 0, 0.1);
+      }
+
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family: var(--font-body);
+        color: var(--text);
+        background: var(--bg);
+        min-height: 100vh;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      /* ── Top accent line ────────────────────── */
+      .top-accent {
+        height: 4px;
+        background: var(--primary);
+      }
+
+      /* ── Navigation ─────────────────────────── */
+      .nav {
+        background: var(--surface);
+        border-bottom: 1px solid var(--border);
+        height: 60px;
+        padding: 0 40px;
+        display: flex;
+        align-items: center;
+        gap: 28px;
+        position: sticky;
+        top: 4px;
+        z-index: 50;
+      }
+
+      .logo {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        text-decoration: none;
+        flex-shrink: 0;
+      }
+
+      .logo-text {
+        font-family: var(--font-logo);
+        font-size: 20px;
+        font-weight: 800;
+        color: var(--text);
+        letter-spacing: -0.3px;
+      }
+
+      .logo-text .dot {
+        color: var(--primary);
+      }
+
+      /* ── Nav Search Bar ─────────────────────── */
+      .search-bar {
+        flex: 1;
+        max-width: 640px;
+        height: 42px;
+        display: flex;
+        align-items: stretch;
+        border: 1.5px solid var(--border);
+        border-radius: 10px;
+        background: var(--surface);
+        overflow: hidden;
+        transition: border-color 0.15s, box-shadow 0.15s;
+      }
+
+      .search-bar:focus-within {
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+      }
+
+      .search-segment {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 0 14px;
+        cursor: pointer;
+        transition: background 0.12s;
+        min-width: 0;
+      }
+
+      .search-segment:hover {
+        background: #f9fafb;
+      }
+
+      .seg-icon {
+        color: var(--text-3);
+        flex-shrink: 0;
+      }
+
+      .seg-text {
+        font-size: 13.5px;
+        font-weight: 500;
+        color: var(--text);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .search-divider {
+        width: 1px;
+        background: var(--divider);
+        align-self: stretch;
+        margin: 8px 0;
+        flex-shrink: 0;
+      }
+
+      .search-btn {
+        height: 100%;
+        padding: 0 18px;
+        background: var(--primary);
+        color: white;
+        border: none;
+        font-family: var(--font-body);
+        font-size: 13.5px;
+        font-weight: 600;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        transition: background 0.15s;
+        border-radius: 0 8px 8px 0;
+        flex-shrink: 0;
+      }
+
+      .search-btn:hover {
+        background: var(--primary-dark);
+      }
+
+      /* ── Main ───────────────────────────────── */
+      .main {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 36px 40px 80px;
+      }
+
+      .page-title {
+        font-size: 26px;
+        font-weight: 700;
+        color: var(--text);
+        margin-bottom: 5px;
+        letter-spacing: -0.3px;
+      }
+
+      .page-subtitle {
+        font-size: 13.5px;
+        color: var(--text-2);
+        margin-bottom: 28px;
+      }
+
+      /* ── Hotel List ─────────────────────────── */
+      .hotels-list {
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+      }
+
+      /* ── Hotel Card ─────────────────────────── */
+      .hotel-card {
+        background: var(--surface);
+        border-radius: 12px;
+        border: 1px solid var(--border);
+        overflow: hidden;
+        display: flex;
+        box-shadow: var(--shadow-card);
+        transition: box-shadow 0.2s, transform 0.2s;
+        cursor: pointer;
+      }
+
+      .hotel-card:hover {
+        box-shadow: var(--shadow-card-hover);
+        transform: translateY(-2px);
+      }
+
+      /* Image placeholder mimics a ski resort photo */
+      .hotel-img {
+        width: 218px;
+        min-height: 152px;
+        flex-shrink: 0;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .hotel-img-inner {
+        position: absolute;
+        inset: 0;
+      }
+
+      /* Building silhouette overlay */
+      .hotel-img-inner::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+          to top,
+          rgba(0, 0, 0, 0.18) 0%,
+          transparent 50%
+        );
+      }
+
+      .hotel-body {
+        flex: 1;
+        padding: 18px 22px 16px;
+        display: flex;
+        flex-direction: column;
+        min-width: 0;
+        border-left: 1px solid var(--border);
+      }
+
+      .hotel-name {
+        font-size: 16px;
+        font-weight: 600;
+        color: var(--text);
+        margin-bottom: 6px;
+        line-height: 1.3;
+      }
+
+      .hotel-stars {
+        display: flex;
+        align-items: center;
+        gap: 1px;
+        margin-bottom: 10px;
+      }
+
+      .star {
+        font-size: 12.5px;
+      }
+
+      .star-on {
+        color: var(--star);
+      }
+
+      .star-off {
+        color: #e5e7eb;
+      }
+
+      .hotel-location {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        font-size: 13px;
+        color: var(--text-2);
+      }
+
+      .hotel-footer {
+        margin-top: auto;
+        padding-top: 14px;
+        border-top: 1px solid var(--border);
+        text-align: right;
+      }
+
+      .price-value {
+        font-size: 18px;
+        font-weight: 700;
+        color: var(--text);
+      }
+
+      .price-per {
+        font-size: 13px;
+        font-weight: 400;
+        color: var(--text-2);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="top-accent"></div>
+
+    <!-- ── Navigation ─────────────────────────────── -->
+    <nav class="nav">
+      <a href="#" class="logo" aria-label="WeSki home">
+        <svg width="28" height="22" viewBox="0 0 28 22" fill="none" aria-hidden="true">
+          <path d="M4 21L14 3L24 21H4Z" fill="#2563EB" opacity="0.7" />
+          <path d="M10.5 21L17.5 9L24.5 21H10.5Z" fill="#2563EB" />
+        </svg>
+        <span class="logo-text">WE<span class="dot">·</span>SKI</span>
+      </a>
+
+      <div class="search-bar" role="search">
+        <!-- Destination -->
+        <div class="search-segment">
+          <svg class="seg-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" aria-hidden="true">
+            <path d="M3 14L7.5 2L12 14H3Z" fill="currentColor" opacity="0.5" />
+            <path d="M5.5 14L7.5 6.5L9.5 14H5.5Z" fill="currentColor" />
+          </svg>
+          <span class="seg-text">La Plagne</span>
+        </div>
+
+        <div class="search-divider" aria-hidden="true"></div>
+
+        <!-- Guests -->
+        <div class="search-segment">
+          <svg class="seg-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" aria-hidden="true">
+            <circle cx="7.5" cy="5.5" r="2.8" stroke="currentColor" stroke-width="1.4" />
+            <path
+              d="M2 14c0-2.8 2.5-5 5.5-5s5.5 2.2 5.5 5"
+              stroke="currentColor"
+              stroke-width="1.4"
+              stroke-linecap="round"
+            />
+          </svg>
+          <span class="seg-text">4 people</span>
+        </div>
+
+        <div class="search-divider" aria-hidden="true"></div>
+
+        <!-- Dates -->
+        <div class="search-segment" style="flex: 1.5">
+          <svg class="seg-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" aria-hidden="true">
+            <rect x="1.5" y="3" width="12" height="10.5" rx="1.5" stroke="currentColor" stroke-width="1.4" />
+            <path d="M1.5 6.5h12M5 1.5v3M10 1.5v3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" />
+          </svg>
+          <span class="seg-text">Dec 1 – Dec 12</span>
+        </div>
+
+        <!-- Search button -->
+        <button class="search-btn">
+          <svg width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true">
+            <circle cx="5.5" cy="5.5" r="4" stroke="white" stroke-width="1.5" />
+            <path d="M9 9L12.5 12.5" stroke="white" stroke-width="1.5" stroke-linecap="round" />
+          </svg>
+          Search
+        </button>
+      </div>
+    </nav>
+
+    <!-- ── Results ─────────────────────────────────── -->
+    <main class="main">
+      <h1 class="page-title">Select your ski trip</h1>
+      <p class="page-subtitle">98 ski trips options &bull; La Plagne &bull; Dec 1 – Dec 12 &bull; 4 people</p>
+
+      <div class="hotels-list" role="list">
+        <!-- Card 1 -->
+        <article class="hotel-card" role="listitem">
+          <div class="hotel-img" aria-hidden="true">
+            <div
+              class="hotel-img-inner"
+              style="background: linear-gradient(170deg, #1c3d6b 0%, #2f618f 35%, #4a87ac 60%, #8ab3c8 80%, #cddde8 100%)"
+            ></div>
+          </div>
+          <div class="hotel-body">
+            <h2 class="hotel-name">Chalet Nina</h2>
+            <div class="hotel-stars" aria-label="4 out of 5 stars">
+              <span class="star star-on">★</span>
+              <span class="star star-on">★</span>
+              <span class="star star-on">★</span>
+              <span class="star star-on">★</span>
+              <span class="star star-off">★</span>
+            </div>
+            <p class="hotel-location">
+              <svg width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true">
+                <path
+                  d="M6.5 1.5C4.567 1.5 3 3.067 3 5c0 2.5 3.5 6.5 3.5 6.5S10 7.5 10 5c0-1.933-1.567-3.5-3.5-3.5Z"
+                  stroke="#9CA3AF"
+                  stroke-width="1.3"
+                />
+                <circle cx="6.5" cy="5" r="1" fill="#9CA3AF" />
+              </svg>
+              La Plagne
+            </p>
+            <div class="hotel-footer">
+              <span class="price-value">£1,485</span>
+              <span class="price-per"> /per person</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- Card 2 -->
+        <article class="hotel-card" role="listitem">
+          <div class="hotel-img" aria-hidden="true">
+            <div
+              class="hotel-img-inner"
+              style="background: linear-gradient(170deg, #1a3a62 0%, #2c5d88 35%, #4580a5 60%, #84aec5 80%, #c8dae7 100%)"
+            ></div>
+          </div>
+          <div class="hotel-body">
+            <h2 class="hotel-name">Hotel Banyan</h2>
+            <div class="hotel-stars" aria-label="5 out of 5 stars">
+              <span class="star star-on">★</span>
+              <span class="star star-on">★</span>
+              <span class="star star-on">★</span>
+              <span class="star star-on">★</span>
+              <span class="star star-on">★</span>
+            </div>
+            <p class="hotel-location">
+              <svg width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true">
+                <path
+                  d="M6.5 1.5C4.567 1.5 3 3.067 3 5c0 2.5 3.5 6.5 3.5 6.5S10 7.5 10 5c0-1.933-1.567-3.5-3.5-3.5Z"
+                  stroke="#9CA3AF"
+                  stroke-width="1.3"
+                />
+                <circle cx="6.5" cy="5" r="1" fill="#9CA3AF" />
+              </svg>
+              La Plagne
+            </p>
+            <div class="hotel-footer">
+              <span class="price-value">£1,485</span>
+              <span class="price-per"> /per person</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- Card 3 -->
+        <article class="hotel-card" role="listitem">
+          <div class="hotel-img" aria-hidden="true">
+            <div
+              class="hotel-img-inner"
+              style="background: linear-gradient(170deg, #18385e 0%, #2a5882 35%, #3f7a9e 60%, #7faac2 80%, #c4d8e5 100%)"
+            ></div>
+          </div>
+          <div class="hotel-body">
+            <h2 class="hotel-name">Hotel &bull; Chamonix sud – Gerpon 102</h2>
+            <div class="hotel-stars" aria-label="4 out of 5 stars">
+              <span class="star star-on">★</span>
+              <span class="star star-on">★</span>
+              <span class="star star-on">★</span>
+              <span class="star star-on">★</span>
+              <span class="star star-off">★</span>
+            </div>
+            <p class="hotel-location">
+              <svg width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true">
+                <path
+                  d="M6.5 1.5C4.567 1.5 3 3.067 3 5c0 2.5 3.5 6.5 3.5 6.5S10 7.5 10 5c0-1.933-1.567-3.5-3.5-3.5Z"
+                  stroke="#9CA3AF"
+                  stroke-width="1.3"
+                />
+                <circle cx="6.5" cy="5" r="1" fill="#9CA3AF" />
+              </svg>
+              La Plagne
+            </p>
+            <div class="hotel-footer">
+              <span class="price-value">£1,485</span>
+              <span class="price-per"> /per person</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- Card 4 -->
+        <article class="hotel-card" role="listitem">
+          <div class="hotel-img" aria-hidden="true">
+            <div
+              class="hotel-img-inner"
+              style="background: linear-gradient(170deg, #1b3960 0%, #2d5c86 35%, #4180a2 60%, #7aacbf 80%, #c2d7e4 100%)"
+            ></div>
+          </div>
+          <div class="hotel-body">
+            <h2 class="hotel-name">Hotel &bull; Chamonix sud – Gerpon 102</h2>
+            <div class="hotel-stars" aria-label="4 out of 5 stars">
+              <span class="star star-on">★</span>
+              <span class="star star-on">★</span>
+              <span class="star star-on">★</span>
+              <span class="star star-on">★</span>
+              <span class="star star-off">★</span>
+            </div>
+            <p class="hotel-location">
+              <svg width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true">
+                <path
+                  d="M6.5 1.5C4.567 1.5 3 3.067 3 5c0 2.5 3.5 6.5 3.5 6.5S10 7.5 10 5c0-1.933-1.567-3.5-3.5-3.5Z"
+                  stroke="#9CA3AF"
+                  stroke-width="1.3"
+                />
+                <circle cx="6.5" cy="5" r="1" fill="#9CA3AF" />
+              </svg>
+              La Plagne
+            </p>
+            <div class="hotel-footer">
+              <span class="price-value">£1,485</span>
+              <span class="price-per"> /per person</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- Card 5 -->
+        <article class="hotel-card" role="listitem">
+          <div class="hotel-img" aria-hidden="true">
+            <div
+              class="hotel-img-inner"
+              style="background: linear-gradient(170deg, #1d3c64 0%, #305f8a 35%, #4783a8 60%, #86afc4 80%, #c8dae8 100%)"
+            ></div>
+          </div>
+          <div class="hotel-body">
+            <h2 class="hotel-name">Le Grand Ski</h2>
+            <div class="hotel-stars" aria-label="3 out of 5 stars">
+              <span class="star star-on">★</span>
+              <span class="star star-on">★</span>
+              <span class="star star-on">★</span>
+              <span class="star star-off">★</span>
+              <span class="star star-off">★</span>
+            </div>
+            <p class="hotel-location">
+              <svg width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true">
+                <path
+                  d="M6.5 1.5C4.567 1.5 3 3.067 3 5c0 2.5 3.5 6.5 3.5 6.5S10 7.5 10 5c0-1.933-1.567-3.5-3.5-3.5Z"
+                  stroke="#9CA3AF"
+                  stroke-width="1.3"
+                />
+                <circle cx="6.5" cy="5" r="1" fill="#9CA3AF" />
+              </svg>
+              La Plagne
+            </p>
+            <div class="hotel-footer">
+              <span class="price-value">£1,120</span>
+              <span class="price-per"> /per person</span>
+            </div>
+          </div>
+        </article>
+      </div>
+    </main>
+  </body>
+</html>

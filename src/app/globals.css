@@ -1,1 +1,55 @@
 @import 'tailwindcss';
+
+/* ── Google Fonts ──────────────────────────────────────────── */
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap');
+
+/* ── Design Tokens ─────────────────────────────────────────── */
+@theme {
+  /* ─ Brand palette (WeSki blue) */
+  --color-primary:      #2563eb;
+  --color-primary-dark: #1d4ed8;
+  --color-primary-light:#eff6ff;
+
+  /* ─ Page & surface */
+  --color-bg:           #eef1fb; /* lavender-blue page background */
+  --color-surface:      #ffffff;
+
+  /* ─ Text */
+  --color-text:         #111827;
+  --color-text-2:       #6b7280;
+  --color-text-3:       #9ca3af;
+
+  /* ─ Borders & dividers */
+  --color-border:       #e5e7eb;
+  --color-divider:      #d1d5db;
+
+  /* ─ Accent */
+  --color-star:         #f59e0b; /* star rating gold */
+
+  /* ─ Typography */
+  --font-logo: 'Nunito', system-ui, sans-serif;
+  --font-sans: 'Inter', system-ui, sans-serif;
+
+  /* ─ Border radius */
+  --radius-card:   0.75rem;   /* 12px — hotel cards */
+  --radius-input:  0.625rem;  /* 10px — search bar */
+  --radius-btn:    0.5rem;    /* 8px  — buttons */
+
+  /* ─ Shadows */
+  --shadow-card:       0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+  --shadow-card-hover: 0 4px 24px rgba(0,0,0,0.10);
+  --shadow-search:     0 0 0 3px rgba(37,99,235,0.10);
+}
+
+/* ── Base ──────────────────────────────────────────────────── */
+html {
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+}
+
+body {
+  min-height: 100vh;
+}

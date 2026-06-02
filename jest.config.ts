@@ -10,6 +10,10 @@ const config: Config = {
     '**/__tests__/**/*.test.tsx',
     '**/src/components/**/*.test.tsx',
     '**/src/components/**/*.test.ts',
+    '**/src/lib/**/*.test.ts',
+    '**/src/lib/**/*.test.tsx',
+    '**/src/hooks/**/*.test.ts',
+    '**/src/hooks/**/*.test.tsx',
   ],
   setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
 };
